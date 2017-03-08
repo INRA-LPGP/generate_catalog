@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
         std::ifstream reference_file;
         reference_file.open(file_name.c_str());
 
-        std::string catalog_name = file_name + "_catalog";
+        std::string catalog_name = file_name.substr(0, file_name.size()-6) + "_catalog" + ".fasta"; // Add a "catalog" at the end of the file name
         std::ofstream catalog_file;
         catalog_file.open(catalog_name.c_str());
 
@@ -32,13 +32,15 @@ int main(int argc, char *argv[]) {
         std::string contig = "";
         std::string sequence = "";
 
+        uint count = 0;
+
         if (reference_file.is_open()){
 
             while(getline(reference_file, line)){
 
                 if (line[0] == '>'){
 
-                    extract_sbf1(sequence, contig, catalog_file);
+                    extract_sbf1(sequence, contig, catalog_file, count);
                     contig = line;
                     sequence = "";
 
@@ -47,6 +49,8 @@ int main(int argc, char *argv[]) {
                     sequence += line;
                 }
             }
+
+            std::cout << "Extraction finished. Found " << count << " sfb1 sites.\n";
 
         } else {
 

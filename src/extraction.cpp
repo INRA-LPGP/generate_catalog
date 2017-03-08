@@ -1,6 +1,6 @@
 #include "extraction.h"
 
-void extract_sbf1(std::string& sequence, std::string& contig, std::ofstream& output_file){
+void extract_sbf1(std::string& sequence, std::string& contig, std::ofstream& output_file, uint& count){
 
     size_t pos_f = sequence.find(sbf1_forward, 0);
     size_t pos_r = sequence.find(sbf1_reverse, 0);
@@ -15,11 +15,12 @@ void extract_sbf1(std::string& sequence, std::string& contig, std::ofstream& out
 
         } else {
 
-            sbf1_chunk = sequence.substr(0, 2*chunk_size+8); // In this case, we start where we can, at position 0
+            sbf1_chunk = sequence.substr(0, 2*chunk_size+8); // In this case, sbf1 is at position lower than chunk_size and thus we start the chunk at position 0
         }
 
         output_file << contig << "_" << pos_f << "\n" << sbf1_chunk << "\n";
         pos_f = sequence.find(sbf1_forward, pos_f+1);
+        ++count;
     }
 
     while(pos_r != std::string::npos){
@@ -30,11 +31,11 @@ void extract_sbf1(std::string& sequence, std::string& contig, std::ofstream& out
 
         } else {
 
-            sbf1_chunk = sequence.substr(0, 2*chunk_size+8); // In this case, we start where we can, at position 0
+            sbf1_chunk = sequence.substr(0, 2*chunk_size+8); // In this case, sbf1 is at position lower than chunk_size and thus we start the chunk at position 0
         }
 
         output_file << contig << "_" << pos_r << "\n" << sbf1_chunk << "\n";
         pos_r = sequence.find(sbf1_reverse, pos_r+1);
-
+        ++count;
     }
 }
