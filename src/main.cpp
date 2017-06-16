@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 
                 if (line[0] == '>'){
 
-                    extract_sbf1(sequence, contig, catalog_file, count);
+                    extract_sbf1(sequence, count);
                     contig = line;
                     sequence = "";
 

@@ -1,41 +1,16 @@
 #include "extraction.h"
 
-void extract_sbf1(std::string& sequence, std::string& contig, std::ofstream& output_file, uint& count){
+void extract_sbf1(std::string& sequence, uint& count){
 
-    size_t pos_f = sequence.find(sbf1_forward, 0);
-    size_t pos_r = sequence.find(sbf1_reverse, 0);
+    size_t pos = std::string::npos;
 
-    std::string sbf1_chunk = "";
+    for (auto s: sites) {
 
-    while(pos_f != std::string::npos){
+        pos = sequence.find(s, 0);
 
-        if (pos_f > chunk_size - 1){
-
-            sbf1_chunk = sequence.substr(pos_f - chunk_size, 2*chunk_size+8); // Take 100 bp on each side of sbf1 site (sbf1 is 8 bp long)
-
-        } else {
-
-            sbf1_chunk = sequence.substr(0, 2*chunk_size+8); // In this case, sbf1 is at position lower than chunk_size and thus we start the chunk at position 0
+        while(pos != std::string::npos){
+            pos = sequence.find(s, pos+1);
+            ++count;
         }
-
-        output_file << contig << "_" << pos_f << "\n" << sbf1_chunk << "\n";
-        pos_f = sequence.find(sbf1_forward, pos_f+1);
-        ++count;
-    }
-
-    while(pos_r != std::string::npos){
-
-        if (pos_r > chunk_size - 1){
-
-            sbf1_chunk = sequence.substr(pos_r - chunk_size, 2*chunk_size+8); // Take 100 bp on each side of sbf1 site (sbf1 is 8 bp long)
-
-        } else {
-
-            sbf1_chunk = sequence.substr(0, 2*chunk_size+8); // In this case, sbf1 is at position lower than chunk_size and thus we start the chunk at position 0
-        }
-
-        output_file << contig << "_" << pos_r << "\n" << sbf1_chunk << "\n";
-        pos_r = sequence.find(sbf1_reverse, pos_r+1);
-        ++count;
     }
 }
